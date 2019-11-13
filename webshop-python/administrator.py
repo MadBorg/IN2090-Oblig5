@@ -34,6 +34,7 @@ def make_bills(conn):
     # quary
     # Name, adress, total due. From orders.
     if username:
+        select = ("name", "address", "Total due")
         q = f"""
             SELECT u.name, u.address, SUM(o.num * p.price)
             FROM ws.orders AS o
@@ -45,6 +46,7 @@ def make_bills(conn):
             GROUP BY u.uid, u.name, u.address;
             """
     else:
+        select = ("Total due")
         q = f"""
             SELECT SUM(o.num * p.price)
             FROM ws.orders AS o
@@ -52,10 +54,14 @@ def make_bills(conn):
                 USING(pid)
             WHERE o.payed = 0;
             """
-    print(q)    
     cur.execute(q)
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
-    print(rows)
+    bill = dict(zip(select, rows))
+
+    for key in bill:
+        print(f"{key}: {bill[key]}")
+    
+
     
 def insert_product(conn):
     # TODO
