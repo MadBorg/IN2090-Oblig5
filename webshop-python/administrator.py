@@ -41,8 +41,8 @@ def make_bills(conn):
     if username:
         WHERE ="WHERE u.username = '{username}' AND o.payed = 0 "
     else:
-        WHERE =f"WHERE o.payed = 0 "
-    GROUP = "GROUP u.uid, u.name, u.address "
+        WHERE ="WHERE o.payed = 0 "
+    GROUP = "GROUP BY u.uid, u.name, u.address "
     q = SELECT + FROM + WHERE + GROUP + ";"
     # q = f"""
     #     SELECT u.name, u.address, SUM(o.num)
