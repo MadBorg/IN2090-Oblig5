@@ -25,12 +25,39 @@ def administrator():
             make_bills(conn)
         elif (ch == 2):
             insert_product(conn)
-    
-def make_bills(conn):
-    # TODO
 
+def make_bills(conn):
+    cur = conn.cursor()
+    print("-- BILLS --  ")
+    username = input("Username: ") or None
+
+    # quary
+    # Name, adress, total due. From orders.
+    SELECT = "SELECT u.name, u.address, SUM(o.num) "
+    FROM =  """
+        FROM users AS u
+        INNER JOIN orders AS o
+        """
+    if username:
+        WHERE ="WHERE u.username = '{username}' AND o.payed = 0 "
+    else:
+        WHERE =f"WHERE o.payed = 0 "
+    GROUP = "GROUP u.uid, u.name, u.address "
+    q = SELECT + FROM + WHERE + GROUP + ";"
+    # q = f"""
+    #     SELECT u.name, u.address, SUM(o.num)
+    #     FROM users AS u
+    #     INNER JOIN orders AS o
+    #     WHERE u.username = '{username}' AND o.payed = 0
+    #     GROUP BY u.uid, u.name, u.address
+    #     """
+    cur.execute(q)
+    rows = cur.fetchall() # Retrieve all restults into a list of tuples
+    print(rows)
+    
 def insert_product(conn):
     # TODO
+
 
 if __name__ == "__main__":
     administrator()
