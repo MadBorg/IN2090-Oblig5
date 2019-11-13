@@ -57,6 +57,7 @@ def make_bills(conn):
     
 def insert_product(conn):
     # TODO
+    raise NotImplementedError()
 
 
 if __name__ == "__main__":
