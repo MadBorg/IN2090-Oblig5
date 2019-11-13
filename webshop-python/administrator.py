@@ -34,7 +34,7 @@ def make_bills(conn):
     # quary
     # Name, adress, total due. From orders.
     if username:
-        select = ("name", "address", "Total due")
+        select = ("Name", "Nddress", "Total due")
         q = f"""
             SELECT u.name, u.address, SUM(o.num * p.price)
             FROM ws.orders AS o
@@ -56,13 +56,14 @@ def make_bills(conn):
             """
     cur.execute(q)
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
-    bill = dict(zip(select, rows[0]))
-    # print(f"bill: {bill}")
-    # print(f"select:{select}, rows:{rows}")
-    print("-- BILL --")
-    for key in bill:
-        print(f"{key}: {bill[key]}")
-    
+    try:
+        bill = dict(zip(select, rows[0])) #since username is uniqe rows will only have one answer. if not this one need to be changed
+        print("-- BILL --")
+        for key in bill:
+            print(f"{key}: {bill[key]}")
+        print("\n")
+    except:
+        print("username not found!")
 
     
 def insert_product(conn):
