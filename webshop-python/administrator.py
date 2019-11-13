@@ -35,8 +35,8 @@ def make_bills(conn):
     # Name, adress, total due. From orders.
     SELECT = "SELECT u.name, u.address, SUM(o.num) "
     FROM =  """
-        FROM users AS u
-        INNER JOIN orders AS o
+        FROM ws.users AS u
+        INNER JOIN ws.orders AS o
         """
     if username:
         WHERE ="WHERE u.username = '{username}' AND o.payed = 0 "
@@ -51,6 +51,7 @@ def make_bills(conn):
     #     WHERE u.username = '{username}' AND o.payed = 0
     #     GROUP BY u.uid, u.name, u.address
     #     """
+    print(q)    
     cur.execute(q)
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
     print(rows)
