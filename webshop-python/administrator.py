@@ -57,7 +57,8 @@ def make_bills(conn):
     cur.execute(q)
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
     bill = dict(zip(select, rows))
-
+    print(f"bill: {bill}")
+    print("-- BILL --")
     for key in bill:
         print(f"{key}: {bill[key]}")
     
