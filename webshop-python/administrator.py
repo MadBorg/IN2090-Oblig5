@@ -33,24 +33,25 @@ def make_bills(conn):
 
     # quary
     # Name, adress, total due. From orders.
-    SELECT = "SELECT u.name, u.address, SUM(o.num) "
-    FROM =  """
-        FROM ws.users AS u
-        INNER JOIN ws.orders AS o
-        """
     if username:
-        WHERE ="WHERE u.username = '{username}' AND o.payed = 0 "
+        q = f"""
+            SELECT u.name, u.address, SUM(o.num * p.price)
+            FROM ws.orders AS o
+            INNER JOIN ws.products AS p
+                USING(pid)
+            INNER JOIN ws.users AS u
+                USING(uid)
+            WHERE o.payed = 0 AND u.username = '{username}'
+            GROUP BY u.uid, u.name, u.address;
+            """
     else:
-        WHERE ="WHERE o.payed = 0 "
-    GROUP = "GROUP BY u.uid, u.name, u.address "
-    q = SELECT + FROM + WHERE + GROUP + ";"
-    # q = f"""
-    #     SELECT u.name, u.address, SUM(o.num)
-    #     FROM users AS u
-    #     INNER JOIN orders AS o
-    #     WHERE u.username = '{username}' AND o.payed = 0
-    #     GROUP BY u.uid, u.name, u.address
-    #     """
+        q = f"""
+            SELECT SUM(o.num * p.price)
+            FROM ws.orders AS o
+            INNER JOIN ws.products AS p
+                USING(pid)
+            WHERE o.payed = 0;
+            """
     print(q)    
     cur.execute(q)
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
