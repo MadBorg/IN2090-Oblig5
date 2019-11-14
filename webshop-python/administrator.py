@@ -41,10 +41,10 @@ def make_bills(conn):
                 USING(pid)
             INNER JOIN ws.users AS u
                 USING(uid)
-            WHERE o.payed = 0 AND u.username = %(username)s
+            WHERE o.payed = 0 AND u.username = %(user)s
             GROUP BY u.uid, u.name, u.address;
             """
-        cur.execute(q, {'username': username})
+        cur.execute(q, {'user': username})
     else:
         select = ("uid", "Name", "Address","Total due")
         q = """
@@ -56,7 +56,7 @@ def make_bills(conn):
                 USING(uid)
             GROUP BY u.uid, u.name, u.address;
             """
-    cur.execute(q, )
+    cur.execute(q )
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
     bills = {}
     for row in rows:
