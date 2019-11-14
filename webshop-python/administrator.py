@@ -41,7 +41,7 @@ def make_bills(conn):
                 USING(pid)
             INNER JOIN ws.users AS u
                 USING(uid)
-            WHERE o.payed = 0 AND u.username = '%(username)s'
+            WHERE o.payed = 0 AND u.username = %(username)s
             GROUP BY u.uid, u.name, u.address;
             """
         cur.execute(q, {'username': username})
@@ -65,7 +65,7 @@ def make_bills(conn):
         for key in bill:
             print(f"{key}: {bill[key]}")
         print("\n")
-    print(bills)
+    # print(bills)
     return bills
     
     # try:
