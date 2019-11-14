@@ -34,41 +34,54 @@ def make_bills(conn):
     # quary
     # Name, adress, total due. From orders.
     if username:
-        select = ("Name", "Nddress", "Total due")
-        q = f"""
-            SELECT u.name, u.address, SUM(o.num * p.price)
+        select = ("uid", "Name", "Address", "Total due")
+        q = """
+            SELECT u.uid, u.name, u.address, SUM(o.num * p.price)
             FROM ws.orders AS o
             INNER JOIN ws.products AS p
                 USING(pid)
             INNER JOIN ws.users AS u
                 USING(uid)
-            WHERE o.payed = 0 AND u.username = '{username}'
+            WHERE o.payed = 0 AND u.username = '%(username)s'
             GROUP BY u.uid, u.name, u.address;
             """
+        cur.execute(q, {'username': username})
     else:
-        select = ("Total due")
-        q = f"""
-            SELECT SUM(o.num * p.price)
+        select = ("uid", "Name", "Address","Total due")
+        q = """
+            SELECT u.uid, u.name, u.address, SUM(o.num * p.price)
             FROM ws.orders AS o
             INNER JOIN ws.products AS p
                 USING(pid)
-            WHERE o.payed = 0;
+            WHERE o.payed = 0
+            GROUP BY u.uid, u.name, u.address;
             """
-    cur.execute(q)
+    cur.execute(q, )
     rows = cur.fetchall() # Retrieve all restults into a list of tuples
-    try:
-        bill = dict(zip(select, rows[0])) #since username is uniqe rows will only have one answer. if not this one need to be changed
+    bills = {}
+    for row in rows:
         print("-- BILL --")
+        bills[row[0]] = bill = dict(zip(select, row))
         for key in bill:
             print(f"{key}: {bill[key]}")
         print("\n")
-    except:
-        print("username not found!")
+    print(bills)
+    return bills
+    
+    # try:
+    #     bill = dict(zip(select, rows[0])) #since username is uniqe rows will only have one answer. if not this one need to be changed
+    #     print("-- BILL --")
+    #     for key in bill:
+    #         print(f"{key}: {bill[key]}")
+    #     print("\n")
+    #     return bill
+    # except:
+    #     print("username not found!")
 
     
 def insert_product(conn):
     # TODO
-    raise NotImplementedError()
+    
 
 
 if __name__ == "__main__":
