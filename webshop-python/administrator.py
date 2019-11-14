@@ -30,9 +30,8 @@ def make_bills(conn):
     cur = conn.cursor()
     print("-- BILLS --  ")
     username = input("Username: ") or None
+    print("")
 
-    # quary
-    # Name, adress, total due. From orders.
     if username:
         select = ("uid", "Name", "Address", "Total due")
         q = """
@@ -62,7 +61,7 @@ def make_bills(conn):
     bills = {}
     for row in rows:
         print("-- BILL --")
-        bills[row[0]] = bill = dict(zip(select, row))
+        bills[row[0]] = bill = dict(zip(select[1:], row[1:]))
         for key in bill:
             print(f"{key}: {bill[key]}")
         print("\n")
