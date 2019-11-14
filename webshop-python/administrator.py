@@ -53,7 +53,8 @@ def make_bills(conn):
             FROM ws.orders AS o
             INNER JOIN ws.products AS p
                 USING(pid)
-            WHERE o.payed = 0
+            INNER JOIN ws.users AS u
+                USING(uid)
             GROUP BY u.uid, u.name, u.address;
             """
     cur.execute(q, )
