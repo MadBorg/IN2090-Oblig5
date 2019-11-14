@@ -81,6 +81,7 @@ def make_bills(conn):
     
 def insert_product(conn):
     # TODO
+    raise NotImplementedError
     
 
 
